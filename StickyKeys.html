@@ -94,7 +94,7 @@
 <h3>5. Reboot the System</h3>
 <pre><button class="copy-btn" onclick="copyText(this)">Copy</button>shutdown /r /f /t 0</pre>
 
----
+
 
 <h2>Part 2: Bypassing Defender Restrictions</h2>
 
@@ -111,7 +111,7 @@
 <p>To exit Safe Mode:</p>
 <pre><button class="copy-btn" onclick="copyText(this)">Copy</button>bcdedit /deletevalue {default} safeboot</pre>
 
----
+
 
 <h2>Part 3: Adding Users and Escalating Privileges</h2>
 
@@ -132,7 +132,7 @@
 <pre><button class="copy-btn" onclick="copyText(this)">Copy</button>[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon]</pre>
 <pre><button class="copy-btn" onclick="copyText(this)">Copy</button>"SpecialAccounts"="hidden_user"</pre>
 
----
+
 
 <h2>Part 4: Working with Kali Linux</h2>
 
@@ -163,14 +163,14 @@
   <li><strong>Physical Security:</strong> Keep your computer in a secure physical location.</li>
 </ul>
 
----
+
 
 <h2>Conclusion</h2>
 <p>In this guide, we covered how to exploit vulnerabilities in Windows to change system files and access the system using Sticky Keys and the Command Prompt. We also walked through adding users, escalating privileges, and hiding users. Lastly, we provided some tips on protecting your system from these kinds of attacks.</p>
 
 <p>If you want to dive deeper into more advanced topics or learn how to defend against these attacks, make sure to check out more of our guides.</p>
 
-<!-- Links to home page and related blog -->
+
 <div>
   <a class="home-link" href="index.html">← Back to Home</a>
   <a class="related-blog" href="mimikatz.html">Basic Guide to Mimikatz <span class="arrow">→</span></a>
