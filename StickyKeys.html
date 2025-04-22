@@ -48,6 +48,23 @@
     ul {
       margin-right: 20px;
     }
+    .home-link, .related-blog {
+      margin-top: 20px;
+      display: inline-block;
+      text-decoration: none;
+      color: #007bff;
+      font-size: 16px;
+      padding: 10px;
+      border: 1px solid #007bff;
+      border-radius: 5px;
+    }
+    .home-link:hover, .related-blog:hover {
+      background-color: #007bff;
+      color: white;
+    }
+    .arrow {
+      margin-left: 8px;
+    }
   </style>
 </head>
 <body>
@@ -152,6 +169,12 @@
 <p>In this guide, we covered how to exploit vulnerabilities in Windows to change system files and access the system using Sticky Keys and the Command Prompt. We also walked through adding users, escalating privileges, and hiding users. Lastly, we provided some tips on protecting your system from these kinds of attacks.</p>
 
 <p>If you want to dive deeper into more advanced topics or learn how to defend against these attacks, make sure to check out more of our guides.</p>
+
+<!-- Links to home page and related blog -->
+<div>
+  <a class="home-link" href="index.html">← Back to Home</a>
+  <a class="related-blog" href="mimikatz.html">Basic Guide to Mimikatz <span class="arrow">→</span></a>
+</div>
 
 <script>
 function copyText(button) {
